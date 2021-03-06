@@ -2,6 +2,28 @@ import random
 import math
 
 
+def scan_input_file(filename):
+    split_filename = filename.split('.')
+    chromatic_number = int(split_filename[1])
+    number_of_nodes = 0
+    number_of_edges = 0
+    connection_matrix = []
+
+    f = open("yuzGCP130.13.col", "r")
+
+    for line in f:
+        split_line = line.split(" ")
+        if split_line[0] == "p":
+            number_of_nodes = int(split_line[2])
+            number_of_edges = int(split_line[3])
+            connection_matrix = [[0 for i in range(number_of_nodes)] for j in range(number_of_nodes)]
+        elif split_line[0] == "e":
+            connection_matrix[int(split_line[1]) - 1][int(split_line[2]) - 1] = 1
+            connection_matrix[int(split_line[2]) - 1][int(split_line[1]) - 1] = 1
+
+    return connection_matrix, number_of_nodes, number_of_edges, chromatic_number
+
+
 class Graph:
     def __init__(self, connection_matrix, number_of_nodes, number_of_edges, chromatic_number):
         self.__connection_matrix = connection_matrix
@@ -13,7 +35,7 @@ class Graph:
         self.__fill_graph_with_random_colors()
 
     def __fill_graph_with_random_colors(self):
-        for i in range(len(self.__number_of_nodes)):
+        for i in range(self.__number_of_nodes):
             self.__colors_of_nodes.append(random.randint(0, self.__chromatic_number - 1))
 
     def coloring_without_conflicts(self, number_of_ants):
@@ -22,7 +44,7 @@ class Graph:
         iteration_number = 1
         while self.__confsoverall() != 0:
             chosen_node = 0
-            
+
             for i in range(number_of_ants):
                 probability_for_node = random.random()
 
@@ -109,3 +131,17 @@ class Graph:
                     best_number_of_conflicts = number_of_conflicts
                 else:
                     self.__colors_of_nodes[current_node] = previous_color
+
+    def print_graph_connections(self):
+        for i in range(self.__number_of_nodes):
+            print(f"Node {i + 1}, way to ", sep="")
+            for j in range(self.__number_of_nodes):
+                if self.__connection_matrix[i][j] == 1:
+                    print(f"{j + 1}, ",sep="")
+            print("")
+
+    def print_node_colors(self):
+        for i in range(self.__number_of_nodes):
+            print(f"Node {i + 1} - Color {self.__colors_of_nodes[i]}")
+
+

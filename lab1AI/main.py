@@ -1,16 +1,15 @@
-# This is a sample Python script.
+import algorithm
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    connection_matrix, number_of_nodes, number_of_edges, chromatic_numbers = \
+        algorithm.scan_input_file("yuzGCP130.13.col")
+
+    graph = algorithm.Graph(connection_matrix, number_of_nodes, number_of_edges, chromatic_numbers)
+
+    graph.coloring_without_conflicts(4)
+
+    graph.print_graph_connections()
+
+    graph.print_node_colors()
 
 
